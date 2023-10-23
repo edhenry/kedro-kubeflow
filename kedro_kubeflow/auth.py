@@ -12,7 +12,6 @@ DEX_PASSWORD = "DEX_PASSWORD"
 
 
 class AuthHandler(object):
-
     log = logging.getLogger(__name__)
 
     def obtain_id_token(self):
@@ -58,9 +57,7 @@ class AuthHandler(object):
     # but it is prone to errors if anything substantial changes in the way DEX handles login screens.
     def obtain_dex_authservice_session(self, kfp_api):
         if DEX_USERNAME not in os.environ or DEX_PASSWORD not in os.environ:
-            self.log.debug(
-                "Skipping DEX authentication due to missing env variables"
-            )
+            self.log.debug("Skipping DEX authentication due to missing env variables")
             return None
 
         s = requests.Session()
@@ -83,15 +80,14 @@ class AuthHandler(object):
 
         r = s.get(kfp_api)
 
-        login_url = extract_url('/dex/auth/local\\?req=[^"]*', r.text)
+        login_url = extract_url('/dex/auth/local/login\\?back=[^"]*', r.text)
 
         if not login_url:
-
-            login_form_url = extract_url('/dex/auth/local\\?[^"]*', r.text)
+            login_form_url = extract_url('/dex/auth/local/login\\?back=[^"]*', r.text)
 
             r = s.get(login_form_url)
 
-            login_url = extract_url('/dex/auth/local/login\\?[^"]*', r.text)
+            login_url = extract_url('/dex/auth/local/login\\?back=[^"]*', r.text)
 
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
