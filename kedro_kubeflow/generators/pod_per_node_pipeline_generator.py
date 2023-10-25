@@ -136,7 +136,7 @@ class PodPerNodePipelineGenerator(object):
                         f"--env {self.context.env} "
                         f"--pipeline {pipeline} "
                         f"--node {node.name} "
-                        f"--config config.yaml"
+                        f"-c config.yaml"
                     ),
                     arguments=create_arguments_from_parameters(params.keys()),
                     pvolumes=node_volumes,

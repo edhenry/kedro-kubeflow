@@ -32,9 +32,7 @@ class OnePodPipelineGenerator(object):
         @dsl.pipeline(self.project_name, self.run_config.description)
         @maybe_add_params(merged_params)
         def convert_kedro_pipeline_to_kfp() -> None:
-            dsl.get_pipeline_conf().set_ttl_seconds_after_finished(
-                self.run_config.ttl
-            )
+            dsl.get_pipeline_conf().set_ttl_seconds_after_finished(self.run_config.ttl)
             with create_pipeline_exit_handler(
                 pipeline,
                 image,
@@ -42,9 +40,7 @@ class OnePodPipelineGenerator(object):
                 self.run_config,
                 self.context,
             ):
-                self._build_kfp_op(
-                    pipeline, merged_params, image, image_pull_policy
-                )
+                self._build_kfp_op(pipeline, merged_params, image, image_pull_policy)
 
         return convert_kedro_pipeline_to_kfp
 
@@ -63,7 +59,7 @@ class OnePodPipelineGenerator(object):
                 "run "
                 f"--env {self.context.env} "
                 f"--pipeline {pipeline} "
-                f"--config config.yaml"
+                f"-c config.yaml"
             ),
             arguments=create_arguments_from_parameters(params.keys()),
             container_kwargs={"env": create_container_environment()},
